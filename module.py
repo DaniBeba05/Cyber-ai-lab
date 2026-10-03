@@ -1,3 +1,22 @@
+class IntentosSuperadosError(Exception):
+    pass
+
+
+class TienelongitudmaximaError(Exception):
+    pass
+
+
+class TienemayusculaError(Exception):
+    pass
+
+
+class TienenumeroError(Exception):
+    pass
+
+
+class TieneunsimboloError (Exception):
+    pass 
+                          
 
 class Password: 
 
@@ -14,29 +33,37 @@ class Password:
     
         return self.contraseña
 
-    
-    def tiene_longitud_maxima (self):
+    def tiene_longitud_maxima(self):
+        if len(self.contraseña) < self.minimo:
 
-        return len (self.contraseña) >= self.minimo
-
-    
-
-    def tiene_una_mayuscula (self):
-    
-        return any(caracter.isupper() for caracter in self.contraseña)
-
-    
-
-    def tiene_un_numero (self):
-   
-        return any (caracter.isdigit() for caracter in self.contraseña)
+            raise TienelongitudmaximaError(self.mensajerequisitonumcaracteres())
+        
+        return True
 
 
-    def tiene_un_simbolo (self):
+    def tiene_una_mayuscula(self):
+        if not any(caracter.isupper() for caracter in self.contraseña):
 
+            raise TienemayusculaError(self.mensajerequisitomayuscula())
+        
+        return True
+
+
+    def tiene_un_numero(self):
+        if not any(caracter.isdigit() for caracter in self.contraseña):
+
+            raise TienenumeroError(self.mensajerequisitonumero())
+        
+        return True
+
+
+    def tiene_un_simbolo(self):
         simbolos = '.,@#?!>;:-_'
+        if not any(caracter in simbolos for caracter in self.contraseña):
 
-        return any(caracter in simbolos for caracter in self.contraseña)
+            raise TieneunsimboloError(self.mensajerequisitosimbolo())
+        
+        return True
 
     
 
@@ -50,9 +77,14 @@ class Password:
         self.num_intentos+=1
 
 
+    
     def comprobar_password_valida(self):
+        self.tiene_longitud_maxima()
+        self.tiene_una_mayuscula()
+        self.tiene_un_numero()
+        self.tiene_un_simbolo()
 
-        return (self.tiene_longitud_maxima() and self.tiene_una_mayuscula() and self.tiene_un_numero() and self.tiene_un_simbolo())
+        return True
 
     def mensajedepasswordvalida(self):
          
@@ -88,5 +120,4 @@ class Password:
         return "Compruebe si su contraseña cumple los requisitos de tener al menos 12 carácteres"
 
 
-
-   
+    
